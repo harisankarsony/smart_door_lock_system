@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>stream</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+</style>
+</head>
+<body>
+
+<div id="metered-frame"></div>
+<script src="https://cdn.metered.ca/sdk/frame/1.4.3/sdk-frame.min.js"></script>
+<script>
+    var frame = new MeteredFrame(); 
+    frame.init({
+        name: "visitor",
+        roomURL: "doorlockapp.metered.live/doorlockstream",
+        accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Imdsb2JhbFRva2VuIjp0cnVlLCJhcHBOYW1lIjoiZG9vcmxvY2thcHAiLCJtZXRlcmVkUGFydGljaXBhbnRJZCI6IjJlNTc2MzJmLTQyNDEtNDcwYi1hODk2LThmZTdkNjFmMjZkNSJ9LCJpYXQiOjE2ODI4MzU5OTF9.Tm0qucH0JiiI_zw8uU3JGGBtqWuRlgT5NoQm2wypvRM",
+    }, document.getElementById("metered-frame"));
+</script>
+
+</body>
+</html

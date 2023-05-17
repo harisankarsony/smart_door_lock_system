@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Client side app for smart door lock" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/android-chrome-192x192.png" />
+
+  <title>Door Lock</title>
+  <link rel="stylesheet" type="text/css" href="loginstyle.css">
+  <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+  <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-auth.js"></script>
+
+
+
+  <script>
+    // Initialize Firebase and import the necessary modules
+    const firebaseConfig = {
+      // Your Firebase configuration goes here
+      apiKey: "AIzaSyA7OGuIcqhZ4MpqboI7a3yM9ViTbh7efak",
+      authDomain: "doorlockapp-6b97f.firebaseapp.com",
+      databaseURL: "https://doorlockapp-6b97f-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "doorlockapp-6b97f",
+      storageBucket: "doorlockapp-6b97f.appspot.com",
+      messagingSenderId: "378668336240",
+      appId: "1:378668336240:web:3ab8ca16dcb7da5e1ba0b5",
+      measurementId: "G-VFHCDJFYHS"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    function signInWithEmailPassword() {
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("password").value;
+      var email_error = document.getElementById("email-error");
+      var password_error = document.getElementById("password-error");
+      
+      // [START auth_signin_password]
+      auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          // Signed in
+          var user = userCredential.user;
+          // ...
+          
+          window.location.href = "index.html";
+        })
+        .catch((error) => {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          document.getElementById("password-error").innerHTML = errorMessage;
+        });
+      // [END auth_signin_password]
+    }
+  </script>
+
+
+
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+
+  <div class="login-box">
+    <h1>Login</h1>
+    <form onsubmit="signInWithEmailPassword(); return false;">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email">
+      <span id="email-error" class="error-message"></span>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password">
+      <span id="password-error" class="error-message"></span>
+      <button type="submit" class="green-button">Log In</button>
+    </form>
+  </div>
+</body>
+
+</html>

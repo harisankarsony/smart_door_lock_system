@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Client side app for smart door lock" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/android-chrome-192x192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>Door Lock</title>
+
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      .button {
+        display: inline-block;
+        padding: 12px 12px;
+        font-size: 22px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        outline: none;
+        color: #fff;
+        background-color: #4CAF50;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 9px #999;
+      }
+  
+      .button:active {
+        background-color: #3e8e41;
+        box-shadow: 0 5px #666;
+        transform: translateY(4px);
+      }
+  
+      #snackbar {
+        visibility: hidden;
+        min-width: 250px;
+        margin-left: -125px;
+        background-color: #ffad31;
+        color: #fff;
+        text-align: center;
+        border-radius: 2px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1;
+        left: 50%;
+        bottom: 30px;
+        font-size: 17px;
+      }
+  
+      #snackbar1 {
+        visibility: hidden;
+        min-width: 250px;
+        margin-left: -125px;
+        background-color: #ffad31;
+        color: #fff;
+        text-align: center;
+        border-radius: 2px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1;
+        left: 50%;
+        bottom: 30px;
+        font-size: 17px;
+      }
+  
+      #snackbar2 {
+        visibility: hidden;
+        min-width: 250px;
+        margin-left: -125px;
+        background-color: #ffad31;
+        color: #fff;
+        text-align: center;
+        border-radius: 2px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1;
+        left: 50%;
+        bottom: 30px;
+        font-size: 17px;
+      }
+      #snackbar3 {
+        visibility: hidden;
+        min-width: 250px;
+        margin-left: -125px;
+        background-color: #ffad31;
+        color: #fff;
+        text-align: center;
+        border-radius: 2px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1;
+        left: 50%;
+        bottom: 30px;
+        font-size: 17px;
+      }
+  
+  
+      #snackbar.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      }
+  
+      #snackbar1.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      }
+  
+      #snackbar2.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      }
+      #snackbar3.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      }
+  
+  
+      @-webkit-keyframes fadein {
+        from {bottom: 0; opacity: 0;} 
+        to {bottom: 30px; opacity: 1;}
+      }
+  
+      @keyframes fadein {
+        from {bottom: 0; opacity: 0;}
+        to {bottom: 30px; opacity: 1;}
+      }
+  
+      @-webkit-keyframes fadeout {
+        from {bottom: 30px; opacity: 1;} 
+        to {bottom: 0; opacity: 0;}
+      }
+  
+      @keyframes fadeout {
+        from {bottom: 30px; opacity: 1;}
+        to {bottom: 0; opacity: 0;}
+      }
+  </style>
+   <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-auth.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-messaging.js"></script>
+
+   <script>
+    // Initialize Firebase and import the necessary modules
+    const firebaseConfig = {
+      // Firebase configuration goes here
+      apiKey: "AIzaSyA7OGuIcqhZ4MpqboI7a3yM9ViTbh7efak",
+      authDomain: "doorlockapp-6b97f.firebaseapp.com",
+      databaseURL: "https://doorlockapp-6b97f-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "doorlockapp-6b97f",
+      storageBucket: "doorlockapp-6b97f.appspot.com",
+      messagingSenderId: "378668336240",
+      appId: "1:378668336240:web:3ab8ca16dcb7da5e1ba0b5",
+      measurementId: "G-VFHCDJFYHS"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+      auth.onAuthStateChanged(user => {
+        if (!user) {
+          document.getElementById('homeBody').style.visibility = "hidden";
+          window.location = 'loginpage.html';
+        }
+        else{
+          document.getElementById('homeBody').style.visibility = "visible";
+        }
+      });
+
+const messaging = firebase.messaging(); 
+
+messaging.getToken(messaging, {
+  vapidKey:
+    "BEell25NdsjhKC1tzHBqH_abn0Zc0-S1oenRa4amyM7BLqplmwZ4nEb3pxzoYPoTRQlqFVTjSo4WcP_Tm86Fhm4",
+})
+  .then((currentToken) => {
+    if (currentToken) {
+      console.log("Firebase Token", currentToken);
+      fetch("https://blynk.cloud/external/api/update?token=5MYYj4m6F7C1ZN3DEQ5qrBiZ92PEWqV2&v2="+currentToken, {
+              method: "GET"
+              });
+    } else {
+      // Show permission request UI
+      console.log(
+        "No registration token available. Request permission to generate one."
+      );
+      // ...
+    }
+  })
+  .catch((err) => {
+    console.log("An error occurred while retrieving token. ", err);
+    // ...
+  });
+  
+   </script>
+  </head>
+  <body id="homeBody">
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <center>
+      <button class="button" type="submit" style="background-color: rgba(251, 5, 5, 0.774); font-size: 18px; height: 40px;
+       width: 80px; float: right;" onclick="redirectLogout()">Logout</button>
+      <h1>Live Video Stream</h1>
+      <div id="metered-frame"></div>
+      <script src="https://cdn.metered.ca/sdk/frame/1.4.3/sdk-frame.min.js"></script>
+      <script>
+          var frame = new MeteredFrame(); 
+          frame.init({
+              width: "100%",
+              height:"350px",
+              name: "user",
+              roomURL: "doorlockapp.metered.live/doorlockstream",
+              accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Imdsb2JhbFRva2VuIjp0cnVlLCJhcHBOYW1lIjoiZG9vcmxvY2thcHAiLCJtZXRlcmVkUGFydGljaXBhbnRJZCI6IjJlNTc2MzJmLTQyNDEtNDcwYi1hODk2LThmZTdkNjFmMjZkNSJ9LCJpYXQiOjE2ODI4MzU5OTF9.Tm0qucH0JiiI_zw8uU3JGGBtqWuRlgT5NoQm2wypvRM",
+          }, document.getElementById("metered-frame"));
+      </script>
+  
+      <!--blynk api call-->
+      <script>
+          function unlockAction(){
+              fetch("https://blynk.cloud/external/api/update?token=5MYYj4m6F7C1ZN3DEQ5qrBiZ92PEWqV2&v0=1", {
+              method: "GET"
+              });
+              var x = document.getElementById("snackbar1");
+              x.className = "show";
+              setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+            
+              
+          }
+          function lockAction(){
+              fetch("https://blynk.cloud/external/api/update?token=5MYYj4m6F7C1ZN3DEQ5qrBiZ92PEWqV2&v0=0", {
+              method: "GET"
+              });
+              var x = document.getElementById("snackbar2");
+              x.className = "show";
+              setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+   
+          }
+          function lcdpush(){
+              var lcdmsg = document.getElementById("lcdmsg").value;
+              fetch("https://blynk.cloud/external/api/update?token=5MYYj4m6F7C1ZN3DEQ5qrBiZ92PEWqV2&v1="+lcdmsg, {
+              method: "GET"
+              });
+              var x = document.getElementById("snackbar");
+              x.className = "show";
+              setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+          }
+          function msgpush(mymsg){
+            fetch("https://blynk.cloud/external/api/update?token=5MYYj4m6F7C1ZN3DEQ5qrBiZ92PEWqV2&v1="+mymsg, {
+              method: "GET"
+              });
+              var x = document.getElementById("snackbar");
+              x.className = "show";
+              setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+          
+          }
+          function lcdClear(){
+            fetch("https://blynk.cloud/external/api/update?token=5MYYj4m6F7C1ZN3DEQ5qrBiZ92PEWqV2&v1="+"", {
+              method: "GET"
+              });
+              var x = document.getElementById("snackbar3");
+              x.className = "show";
+              setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+  
+          }
+          function redirectLogout(){
+            auth.signOut();
+            window.location.href="index.html"
+          }
+      </script>
+  
+      <br><br>
+      <h1> Door lock control:</h1>
+      <button class="button" style="background-color: rgba(251, 5, 5, 0.774);" onclick="unlockAction()">Unlock</button>
+      <button class= "button" style="background-color: rgba(251, 5, 5, 0.774);" onclick="lockAction()">Lock</button>
+  
+      <br><br><br>
+      <h1>Quick Messages:</h1>
+      <form>
+        <button class="button" type="submit" onclick="msgpush('Do not disturb');return false">Do not disturb </button>
+        <button class="button" type="submit" onclick="msgpush('Busy right now');return false">Busy right now </button> <br> <br>
+        <button class="button" type="submit" onclick="msgpush('Away on vacation');return false">Away on vacation</button> <br> <br>
+        <button class="button" type="submit" onclick="msgpush('Please come later');return false">Please come later</button> <br> <br>
+        <button class="button" type="submit" onclick="msgpush('Not at station');return false">Not at station</button> 
+        <button class="button" type="submit" onclick="msgpush('Away for work');return false">Away for work</button>
+      </form>
+      
+      <br><br>
+      <h1> LCD message </h1>
+      <form onsubmit="lcdpush();return false">
+          <input type="text" name="msg" id="lcdmsg" maxlength=32 style="padding: 12px 20px; 
+          margin: 8px 0; box-sizing: border-box; border: 3px solid green; border-radius: 15px; font-size: 20px;" />
+          <button class="button" type="submit" onclick="">Submit</button>
+          <button class="button" type="reset">Clear</button> <br> <br>
+          <button class="button" style="background-color: rgba(251, 5, 5, 0.774);"  onclick="lcdClear();return false"> Clear LCD display</button>
+  
+      </form> 
+      <div id="snackbar">
+        Message sent!!
+        </div>
+      <div id="snackbar1">
+          Door unlocked!!
+          </div>
+  
+      <div id="snackbar2">
+        Door locked!!
+      </div>
+        <div id="snackbar3">
+          Display cleared!!
+          </div>
+        
+  </center> 
+
+  </body>
+</html>
