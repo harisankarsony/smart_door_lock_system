@@ -1,0 +1,1 @@
+An IoT based smart doorlock system with real-time video communication with the visitor, remote locking and unlocking capabilities, RFID keycard, LCD display for showing messages or instructions... all controlled over the internet through a PWA.
